@@ -1,14 +1,11 @@
 import uvicorn
-
-import pandas as pd
-
-from typing import List
+import awswrangler as wr
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-
-from pydantic import BaseModel
+from routers import insert
+from constants import AWS_CATALOG_DBNAME
 
 app = FastAPI()
 
@@ -25,23 +22,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
-class Article(BaseModel):
-    title: str
-    subTitle: str
-    article: str
+app.include_router(insert.router)
 
 
-@app.post('/insert/articles')
-async def insert_article(articles: List[Article]):
-    df = pd.DataFrame([article.dict() for article in articles])
-    print(df)
-    df.to_parquet(
-        's3://test-product-host/articles/article.parquet.gzip',
-        compression='gzip'
-    )
-    return 'hello'
+@app.get('/test')
+async def test():
+    return 'test'
 
 
-if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=9999)
+if __name__ == "__main__":
+    databases = wr.catalog.databases()
+    if AWS_CATALOG_DBNAME not in databases['Database'].values:
+        wr.catalog.create_database(name=AWS_CATALOG_DBNAME)
+    uvicorn.run(app, host="0.0.0.0", port=9999)

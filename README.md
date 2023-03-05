@@ -1,25 +1,24 @@
+## Information to store from crawl
+### crawler env settings
+<b>eslint setting</b>
 ```shell
 npm i eslint -D
 ```
 
 ```shell
-npx install-peerdeps --dev eslint-config-airbnb
-```
-
-```shell
 npx eslint --init
 ```
-
-```shell
-npm i -D tsconfig-paths
-```
-
-install s3f3
+<b>install s3f3</b>
 ```shell
 conda install -c conda-forge s3fs
 ```
 
-aws-vault login
+<b>aws-vault login</b>
 ```shell
-aws-vault exec "js" -- zsh
+aws-vault exec "[aws-vault-name]"
 ```
+
+### references
+<b>server</b>
+- [fastapi](https://fastapi.tiangolo.com/)
+- [aws-sdk](https://aws-sdk-pandas.readthedocs.io/en/stable/index.html)
